@@ -1,0 +1,49 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id    String  @id @default(uuid())
+  key   String  @unique
+  name  String
+  priority  Int  @default(0)
+  dishes Dish[]
+}
+
+model Dish {
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  imageUrl    String
+  categoryType String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  author    String
+  content   String
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
+}
+
+model Reservation {
+  id             String   @id @default(uuid())
+  name           String
+  email          String
+  phone          String
+  date           DateTime
+  peopleCount    Int
+  message        String?
+  createdAt      DateTime @default(now())
+}
